@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,5 +43,12 @@ public class PhoneController {
 		Phone createdPhone = phoneRepository.save(phone);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(phone.getId()).toUri();
 		return ResponseEntity.created(uri).body(createdPhone);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deletePhone(@PathVariable Long id) {
+		Phone deletedPhone = phoneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Phone", "id", id));
+		phoneRepository.delete(deletedPhone);
+		return ResponseEntity.noContent().build();
 	}
 }
