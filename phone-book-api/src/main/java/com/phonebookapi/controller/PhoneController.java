@@ -3,10 +3,13 @@ package com.phonebookapi.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.phonebookapi.exception.ResourceNotFoundException;
 import com.phonebookapi.model.Phone;
 import com.phonebookapi.repository.PhoneRepository;
 
@@ -22,5 +25,8 @@ public class PhoneController {
 		return phoneRepository.findAll();
 	}
 	
-	
+	@GetMapping("/{id}")
+	public Phone getPhoneById(@PathVariable Long id){
+		return phoneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Phone", "id", id));
+	}
 }
