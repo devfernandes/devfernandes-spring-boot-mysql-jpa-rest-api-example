@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,5 +51,15 @@ public class PhoneController {
 		Phone deletedPhone = phoneRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Phone", "id", id));
 		phoneRepository.delete(deletedPhone);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<?> putPhone(@PathVariable Long id,@Valid @RequestBody Phone newPhone){
+		return phoneRepository.findById(id).map(phone -> {
+			phone.setNumber(newPhone.getNumber());
+			phone.setPerson(newPhone.getPerson());
+			phoneRepository.save(phone);
+			return ResponseEntity.ok(phone);
+		}).orElseThrow(()-> new ResourceNotFoundException("Phone", "id", id));
 	}
 }
