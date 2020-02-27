@@ -22,7 +22,7 @@ DELETE /people/{id}
 ### Phones
 GET /phones
 
-POST phones
+POST /phones
 
 GET /phone/{id}
 
